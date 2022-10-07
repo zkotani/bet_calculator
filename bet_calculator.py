@@ -144,7 +144,7 @@ def bet_info(total_bets: int):
                 continue
             else:
                 break
-        all_bets[bet_title] = float_percent
+        all_bets[bet_title] = (float_percent / 100)
     return all_bets
 
 def bet_math(total_pool: float, all_bets: dict):
@@ -158,5 +158,6 @@ greeting()
 total_pool = collect_pool()
 total_bets = number_of_bets()
 all_bets = bet_info(total_bets)
+print(all_bets)
 calculated_bets = bet_math(total_pool, all_bets)
 print(calculated_bets)
