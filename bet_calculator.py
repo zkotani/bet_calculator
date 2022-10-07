@@ -10,12 +10,30 @@ Github -- http://github.com/zkotani
 # Imports
 
 import re # Regular expression support
+import sys # System control
+from time import sleep # Sleep function
 
 # Functions
 
+def exit_program(exit_prompt: str):
+    while True:
+        # Does the user wish to exit the program?
+        exit = input(f'{exit_prompt}')
+        if re.fullmatch(('y|Y|n|N'), exit):
+            break
+        else:
+            # Make sure user is entering `y` or `n`
+            print('\nError! Please answer using \'y\' or \'n\'.')
+            continue
+        # Exit if the user has selected yes
+    if re.fullmatch('y|Y', exit):
+        print('\nThanks for using Bet Calculator! Bye~')
+        sleep(10)
+        sys.exit()
+
 def greeting():
     # Prints greeting strings
-    greeting_string = '# Welcome to the Bet Calculator v1.1! #' # Welcome string
+    greeting_string = '# Welcome to Bet Calculator v1.1! #' # Welcome string
     greeting_hash = ''
     for char in greeting_string:
         # Creates a string the same number of characters as
@@ -54,24 +72,23 @@ def collect_pool():
             continue
         # Make sure user is entering a value greater than 0
         if bet_float <= 0:
-            while True:
-                # Does the user wish to exit the program?
-                exit = input('\nYou can\'t bet with $0 or less! Exit? [y/n]\n> ')
-                if re.match(('y|Y|n|N'), exit):
-                    break
-                else:
-                    # Make sure user is entering `y` or `n`
-                    print('\nError! Please answer using \'y\' or \'n\'.')
-                    continue
-            # Exit if the user has selected yes
-            if re.match('y|Y', exit):
-                break
-            else:
-                continue
+            exit_program('\nYou can\'t bet with $0 or less! Exit? [y/n]\n> ')
         break
     return bet_float
+
+def number_of_bets():
+    # Ask the user how many bets will be placed.
+    while True:
+        try:
+            num_bets = int(input('\nHow many bets will be placed?\n> '))
+        except ValueError:
+            # If there is a value error, let the user know
+            print('\nError! Please enter a valid number!')
+            continue
+        if num_bets <= 0:
+            exit_program('\nError! You can\'t bet on 0 or fewer games! Exit? [y/n]\n> ')
+
 
 
 greeting()
 total_pool = collect_pool()
-
