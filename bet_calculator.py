@@ -10,7 +10,7 @@ Github -- http://github.com/zkotani
 # Imports
 
 import re # Regular expression support
-import sys # System control
+import sys # Exit function
 from time import sleep # Sleep function
 
 # Functions
@@ -73,6 +73,7 @@ def collect_pool():
             continue
         # Make sure user is entering a value greater than 0
         if bet_float <= 0:
+            # Call exit_program()
             exit_program('\nYou can\'t bet with $0 or less! Exit? [y/n]\n> ')
             continue
         break
@@ -87,12 +88,62 @@ def number_of_bets():
             # If there is a value error, let the user know
             print('\nError! Please enter a valid number!')
             continue
+        # Make sure user is entering a value greater than 0
         if num_bets <= 0:
+            # Call exit_program()
             exit_program('\nError! You can\'t bet on 0 or fewer games! Exit? [y/n]\n> ')
             continue
         break
     return num_bets
 
+def bet_info(total_bets: int):
+    all_bets = {}
+    for i in range(total_bets):
+        while True:
+            bet_title = input('\nEnter the name of the team or title of the bet.\n> ')
+            title_ok = input(f'\nBet title: {bet_title}? [y/n]\n> ')
+            while True:
+                if re.fullmatch('(y|Y|n|N)', title_ok):
+                    break
+                else:
+                    print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
+                    continue
+            if re.fullmatch('(n|N)', title_ok):
+                continue
+            else:
+                break
+        while True:
+            bet_percent = input(f'\nWhat percentage of your pool is going towards Bet #{i+1}: {bet_title}?\n> %')
+            if re.fullmatch('(\d*(\.\d{1,})?)', bet_percent):
+                try:
+                    float_percent = float(bet_percent)
+                except ValueError:
+                    print('\nError! Make sure you\'re entering a valid number!')
+                    continue
+            else:
+                print('\nError! Make sure you\'re entering a number between 0-100.')
+                continue
+            if float_percent <= 0:
+                exit_program('\nError! Can\'t bet 0% or less. Exit? [y/n]\n> ')
+                continue
+            elif float_percent > 100:
+                exit_program('\nError! Can\'t bet over 100% Exit? [y/n]\n> ')
+                continue                
+            while True:
+                confirm_bet = input(f'\nYou would like to bet {float_percent}% of your pool on {bet_title}? [y/n]\n> ')
+                if re.fullmatch('(y|Y|n|N)', confirm_bet):
+                    break
+                else:
+                    print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
+                    continue
+            if re.fullmatch('(n|N)', confirm_bet):
+                continue
+            else:
+                break
+        all_bets[bet_title] = float_percent
+    return all_bets
+
 greeting()
 total_pool = collect_pool()
 total_bets = number_of_bets()
+bet_info(total_bets)
