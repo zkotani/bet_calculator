@@ -24,36 +24,36 @@ def greeting():
     # Print the greeting to the console
     print(f'\n{greeting_hash}\n{greeting_string}\n{greeting_hash}')
 
-def pool_and_games():
+def collect_pool():
     # Collect the total betting pool & number of games to bet on
     while True:
-        try:
-            # Ask user for amount in betting pool -- make sure it can be converted to a float
-            bet_pool = input('\nHow much money is currently in your betting pool?\n> $')
-            float(bet_pool)
-        except ValueError:
-            # If the entered value raises a ValueError, let the user know
-            print(f'\nError! Please make sure you\'re entering a number.\n')
-            continue
+        # Ask user for amount in betting pool
+        bet_pool = input('\nHow much money is currently in your betting pool?\n> $')
         # Check to make sure the user has entered the betting pool as:
             # > $1000
             # > $1,000
             # > 1000.00
             # > 1,000.00
-        if re.match('(\d*(,\d{3})*(\.\d{1,2})?)', bet_pool):
-            if (',') in bet_pool:
-                split_pool = bet_pool.split(',')
-                bet_float = ''
-                for i in split_pool:
-                    bet_pool += split_pool[i]
+        if re.fullmatch("(\d{1,}(,\d{3})*(\.\d{1,2})?)", bet_pool):
+            # If the entered value contains commas, remove them
+            split_pool = bet_pool.split(',')
+            bet_float = ''
+            # Add the split strings back together
+            for i in range(len(split_pool)):
+                bet_float += split_pool[i]
+            try:
+                # Try to convert the entered value to a float
                 bet_float = float(bet_float)
-            else:
-                bet_float = float(bet_pool)
-
+            except ValueError:
+                # If the entered value raises a ValueError, let the user know
+                print(f'\nError! Please make sure you\'re entering a valid number.')
+                continue
         else:
-            break
+            print('''\nError! Make sure you\'re entering your value in one of the following formats: \
+                    \n1. 1000\n2. 1,000\n3. 1000.00\n4. 1,000.00''')
+            continue
         # Make sure user is entering a value greater than 0
-        if bet_pool <= 0:
+        if bet_float <= 0:
             while True:
                 # Does the user wish to exit the program?
                 exit = input('\nYou can\'t bet with $0 or less! Exit? [y/n]\n> ')
@@ -68,7 +68,10 @@ def pool_and_games():
                 break
             else:
                 continue
+        break
+    return bet_float
 
 
 greeting()
-pool_and_games()
+total_pool = collect_pool()
+
