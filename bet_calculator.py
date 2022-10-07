@@ -1,3 +1,5 @@
+#!/bin/python
+
 '''
 Name -- bet_calculator
 Version -- 1.1
