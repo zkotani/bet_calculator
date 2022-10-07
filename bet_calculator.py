@@ -11,26 +11,7 @@ Github -- http://github.com/zkotani
 
 import re # Regular expression support
 import sys # Exit function
-from time import sleep # Sleep function
-
-# Functions
-
-def exit_program(exit_prompt: str):
-    while True:
-        # Does the user wish to exit the program?
-        exit = input(f'{exit_prompt}')
-        if re.fullmatch(('y|Y|n|N'), exit):
-            break
-        else:
-            # Make sure user is entering `y` or `n`
-            print('\nError! Please answer using \'y\' or \'n\'.')
-            continue
-        # Exit if the user has selected yes
-    if re.fullmatch('y|Y', exit):
-        print('\nThanks for using Bet Calculator!')
-        sleep(5)
-        print('Bye~')
-        sys.exit()
+from time import sleep # Sleep functionhttps://wiki.archlinux.org/index.php/Zs … ent_rehash
 
 def greeting():
     # Prints greeting strings
@@ -183,12 +164,17 @@ def bet_math(total_pool: float, all_bets: dict):
         bet_amount = v * total_pool
         # Add entry to new dictionary
             # Key: name of team/bet
-            # Value: comma separated (bet percent,bet amount)
-        calculated_bets[k] = f'{str(v)},{str(bet_amount)}'
+            # Value: array containing bet percent and bet amount
+        calculated_bets[k] = [str(v), str(bet_amount)]
     return calculated_bets
+
+def output(calculated_bets: dict):
+    for k, v in calculated_bets.items():
+        print(f'\nBet {v[0] * 100}% on {k} for a total of: ${v[1]}.')
 
 greeting()
 total_pool = collect_pool()
 total_bets = number_of_bets()
 all_bets = bet_info(total_bets)
 calculated_bets = bet_math(total_pool, all_bets)
+output(calculated_bets)
