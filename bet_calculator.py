@@ -27,8 +27,9 @@ def exit_program(exit_prompt: str):
             continue
         # Exit if the user has selected yes
     if re.fullmatch('y|Y', exit):
-        print('\nThanks for using Bet Calculator! Bye~')
-        sleep(10)
+        print('\nThanks for using Bet Calculator!')
+        sleep(5)
+        print('Bye~')
         sys.exit()
 
 def greeting():
@@ -73,6 +74,7 @@ def collect_pool():
         # Make sure user is entering a value greater than 0
         if bet_float <= 0:
             exit_program('\nYou can\'t bet with $0 or less! Exit? [y/n]\n> ')
+            continue
         break
     return bet_float
 
@@ -87,6 +89,7 @@ def number_of_bets():
             continue
         if num_bets <= 0:
             exit_program('\nError! You can\'t bet on 0 or fewer games! Exit? [y/n]\n> ')
+            continue
 
 
 
