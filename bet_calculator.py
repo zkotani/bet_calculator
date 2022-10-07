@@ -90,8 +90,9 @@ def number_of_bets():
         if num_bets <= 0:
             exit_program('\nError! You can\'t bet on 0 or fewer games! Exit? [y/n]\n> ')
             continue
-
-
+        break
+    return num_bets
 
 greeting()
 total_pool = collect_pool()
+total_bets = number_of_bets()
