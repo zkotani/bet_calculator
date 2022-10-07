@@ -100,14 +100,18 @@ def bet_info(total_bets: int):
     all_bets = {}
     for i in range(total_bets):
         while True:
-            bet_title = input('\nEnter the name of the team or title of the bet.\n> ')
-            title_ok = input(f'\nBet title: {bet_title}? [y/n]\n> ')
-            while True:
-                if re.fullmatch('(y|Y|n|N)', title_ok):
-                    break
-                else:
-                    print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
-                    continue
+            bet_title = input(f'\nEnter the name of the team or title of bet #{i+1}.\n> ')
+            if bet_title in all_bets:
+                print('\nError! You\'re already using this name. Try something different.')
+                continue
+            else:
+                title_ok = input(f'\nBet title: {bet_title}? [y/n]\n> ')
+                while True:
+                    if re.fullmatch('(y|Y|n|N)', title_ok):
+                        break
+                    else:
+                        print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
+                        continue
             if re.fullmatch('(n|N)', title_ok):
                 continue
             else:
