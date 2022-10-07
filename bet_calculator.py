@@ -105,8 +105,8 @@ def bet_info(total_bets: int):
                 print('\nError! You\'re already using this name. Try something different.')
                 continue
             else:
-                title_ok = input(f'\nBet title: {bet_title}? [y/n]\n> ')
                 while True:
+                    title_ok = input(f'\nBet title: {bet_title}? [y/n]\n> ')
                     if re.fullmatch('(y|Y|n|N)', title_ok):
                         break
                     else:
@@ -147,7 +147,16 @@ def bet_info(total_bets: int):
         all_bets[bet_title] = float_percent
     return all_bets
 
+def bet_math(total_pool: float, all_bets: dict):
+    calculated_bets = {}
+    for k, v in all_bets.items():
+        bet_amount = v * total_pool
+        calculated_bets[k] = f'{str(v)},{str(bet_amount)}'
+    return calculated_bets
+
 greeting()
 total_pool = collect_pool()
 total_bets = number_of_bets()
-bet_info(total_bets)
+all_bets = bet_info(total_bets)
+calculated_bets = bet_math(total_pool, all_bets)
+print(calculated_bets)
