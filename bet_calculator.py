@@ -13,7 +13,27 @@ Github:         http://github.com/zkotani
 
 import re # Regular expression support
 import sys # Exit function
-from time import sleep # Sleep functionhttps://wiki.archlinux.org/index.php/Zs … ent_rehash
+from time import sleep # Sleep function
+
+
+# Functions
+
+def exit_program(exit_prompt: str):
+    while True:
+        # Does the user wish to exit the program?
+        exit = input(f'{exit_prompt}')
+        if re.fullmatch(('y|Y|n|N'), exit):
+            break
+        else:
+            # Make sure user is entering `y` or `n`
+            print('\nError! Please answer using \'y\' or \'n\'.')
+            continue
+        # Exit if the user has selected yes
+    if re.fullmatch('y|Y', exit):
+        print('\nThanks for using Bet Calculator!')
+        sleep(5)
+        print('Bye~')
+        sys.exit()
 
 def greeting():
     # Prints greeting strings
@@ -138,19 +158,18 @@ def bet_info(total_bets: int):
                 exit_program('\nError! Can\'t bet over 100% Exit? [y/n]\n> ')
                 continue
             # Confirm the user`s input
-                confirm_bet = input(f'\nYou would like to bet {float_percent}% of your pool on {bet_title}? [y/n]\n> ')
-                if re.fullmatch('(y|Y|n|N)', confirm_bet):
-                    break
-                # Make sure the user enters `y` or `n`
-                else:
-                    print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
+            confirm_bet = input(f'\nYou would like to bet {float_percent}% of your pool on {bet_title}? [y/n]\n> ')
+            if re.fullmatch('(y|Y|n|N)', confirm_bet):
+                # If the user isn`t happy with their choice, restart this section
+                if re.fullmatch('(n|N)', confirm_bet):
                     continue
-            # If the user isn`t happy with their choice, restart this section
-            if re.fullmatch('(n|N)', confirm_bet):
-                continue
-            # Move to next section if they`re happy with their input
+                # Move to next section if they`re happy with their input
+                else:
+                    break
+            # Make sure the user enters `y` or `n`
             else:
-                break
+                print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
+                continue
         # Add an entry to the all_bets dictionary
             # Key: name of team/bet
             # Value: bet percent

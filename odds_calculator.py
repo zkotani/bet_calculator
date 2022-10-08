@@ -23,7 +23,7 @@ def implied_probability(team_1: str, team_2: str, odds_1: str, odds_2: str):
 
 
 def team_input():
-    team_1 = input('Enter the name of the first team: ')
+    team_1 = input('\nEnter the name of the first team: ')
     while True:
         odds_1 = input(f'\nEnter {team_1}\'s odds [American]: ')
         if re.fullmatch('(-|\+)\d{3}', odds_1):
