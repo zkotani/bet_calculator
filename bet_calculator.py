@@ -136,7 +136,7 @@ def bet_info(total_bets: int):
             # Make sure input is not over 100
             elif float_percent > 100:
                 exit_program('\nError! Can\'t bet over 100% Exit? [y/n]\n> ')
-                continue                
+                continue
             # Confirm the user`s input
             while True:
                 confirm_bet = input(f'\nYou would like to bet {float_percent}% of your pool on {bet_title}? [y/n]\n> ')
@@ -172,7 +172,8 @@ def bet_math(total_pool: float, all_bets: dict):
 
 def output(calculated_bets: dict):
     for k, v in calculated_bets.items():
-        print(f'\nBet {v[0] * 100}% on {k} for a total of: ${v[1]}.')
+        percent_total = float(v[0]) * 100
+        print(f'\nBet {percent_total}% on {k} for a total of: ${v[1]}.')
 
 greeting()
 total_pool = collect_pool()
