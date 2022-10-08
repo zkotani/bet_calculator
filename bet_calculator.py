@@ -1,12 +1,12 @@
 #!/bin/python
 
 '''
-Name -- bet_calculator
-Version -- 1.1
-Description -- Simple python script used to automate sports betting.
-    Calculates amount for individual bets based on percentages of a main pool.
-Developer -- Zyphlen Kotani [zkotani@gmail.com]
-Github -- http://github.com/zkotani
+Name:           bet_calculator.py
+Version:        1.1
+Description:    Simple python script used to automate sports betting.
+                    Calculates amount for individual bets based on percentages of a main pool.
+Developer:      Zyphlen Kotani [zkotani@gmail.com]
+Github:         http://github.com/zkotani
 '''
 
 # Imports
@@ -138,7 +138,6 @@ def bet_info(total_bets: int):
                 exit_program('\nError! Can\'t bet over 100% Exit? [y/n]\n> ')
                 continue
             # Confirm the user`s input
-            while True:
                 confirm_bet = input(f'\nYou would like to bet {float_percent}% of your pool on {bet_title}? [y/n]\n> ')
                 if re.fullmatch('(y|Y|n|N)', confirm_bet):
                     break
@@ -175,9 +174,9 @@ def output(calculated_bets: dict):
         percent_total = float(v[0]) * 100
         print(f'\nBet {percent_total}% on {k} for a total of: ${v[1]}.')
 
-greeting()
-total_pool = collect_pool()
-total_bets = number_of_bets()
-all_bets = bet_info(total_bets)
-calculated_bets = bet_math(total_pool, all_bets)
-output(calculated_bets)
+# greeting()
+# total_pool = collect_pool()
+# total_bets = number_of_bets()
+# all_bets = bet_info(total_bets)
+# calculated_bets = bet_math(total_pool, all_bets)
+# output(calculated_bets)
