@@ -32,7 +32,7 @@ def exit_program(exit_prompt: str):
     if re.fullmatch('y|Y', exit):
         print('\nThanks for using Bet Calculator!')
         sleep(5)
-        print('Bye~')
+        print('\nBye~\n')
         sys.exit()
 
 def greeting():

@@ -10,8 +10,6 @@ Github:         https://github.com/zkotani
 
 import odds_calculator
 import bet_calculator
-import re
-import sys
 
 def options_menu():
     print('\nProgram options:')
@@ -23,16 +21,17 @@ bet_calculator.greeting()
 options_menu()
 while True:
     try:
-        user_option = int(input('Which option would you like to choose?\n> '))
-        if user_option not in (1, 2, 3):
+        user_option = int(input('\nWhich option would you like to choose?\n> '))
+        if user_option not in range(1, 4):
             raise ValueError
     except ValueError:
         print('\nError! Option must be a valid number from 1-3, try again.')
+        continue
     break
 match user_option:
     case 1:
         pass
     case 2:
-        pass
+        odds_calculator.odds_calc()
     case 3:
-        sys.exit()
+        bet_calculator.exit_program('\nAre you sure you would like to exit? [y/n]\n > ')
