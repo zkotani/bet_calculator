@@ -35,4 +35,4 @@ match user_option:
     case 2:
         pass
     case 3:
-        pass
+        sys.exit()
