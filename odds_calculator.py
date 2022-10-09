@@ -51,7 +51,19 @@ def team_input():
         else:
             print('\nError! Odds must be in American format [-/+100].')
             continue
-    team_2 = input('\nEnter the name of the second team: ')
+    while True:
+        team_2 = input('\nEnter the name of the second team: ')
+        while True:
+            team_2_ok = input(f'\nTeam #1:{team_2}? [y/n]')
+            if re.fullmatch('(y|Y|n|N)', team_2_ok):
+                break
+            else:
+                print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
+                continue
+        if re.fullmatch('(n|N)', team_2_ok):
+            continue
+        else:
+            break
     while True:
         odds_2 = input(f'\nEnter {team_2}\'s odds [American]: ')
         if re.fullmatch('(-|\+)\d{3}', odds_2):
