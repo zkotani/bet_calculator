@@ -193,9 +193,10 @@ def output(calculated_bets: dict):
         percent_total = float(v[0]) * 100
         print(f'\nBet {percent_total}% on {k} for a total of: ${v[1]}.')
 
-# greeting()
-# total_pool = collect_pool()
-# total_bets = number_of_bets()
-# all_bets = bet_info(total_bets)
-# calculated_bets = bet_math(total_pool, all_bets)
-# output(calculated_bets)
+def bet_calc():
+    greeting()
+    total_pool = collect_pool()
+    total_bets = number_of_bets()
+    all_bets = bet_info(total_bets)
+    calculated_bets = bet_math(total_pool, all_bets)
+    output(calculated_bets)

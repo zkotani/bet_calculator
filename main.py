@@ -18,8 +18,8 @@ def options_menu():
     print('3. Quit')
 
 bet_calculator.greeting()
-options_menu()
 while True:
+    options_menu()
     try:
         user_option = int(input('\nWhich option would you like to choose?\n> '))
         if user_option not in range(1, 4):
@@ -27,11 +27,11 @@ while True:
     except ValueError:
         print('\nError! Option must be a valid number from 1-3, try again.')
         continue
-    break
-match user_option:
-    case 1:
-        pass
-    case 2:
-        odds_calculator.odds_calc()
-    case 3:
-        bet_calculator.exit_program('\nAre you sure you would like to exit? [y/n]\n > ')
+    match user_option:
+        case 1:
+            odds_calculator.odds_calc()
+            continue
+        case 2:
+            bet_calculator.bet_calc()
+        case 3:
+            bet_calculator.exit_program('\nAre you sure you would like to exit? [y/n]\n > ')
