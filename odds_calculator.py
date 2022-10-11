@@ -84,7 +84,7 @@ def team_input():
     while True:
         team_2 = input('\nEnter the name of the second team.\n> ')
         while True:
-            team_2_ok = input(f'\nTeam #1: {team_2}? [y/n]\n> ')
+            team_2_ok = input(f'\nTeam #2: {team_2}? [y/n]\n> ')
             if re.fullmatch('(y|Y|n|N)', team_2_ok):
                 break
             else:

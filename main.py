@@ -63,7 +63,7 @@ while True:
             bet_pool = bet_calculator.collect_pool()
             number_of_games = bet_calculator.number_of_bets()
             for i in range(int(number_of_games)):
-                bet_calculator.greeting(f'# GAME #{i + 1 } #')
+                bet_calculator.greeting(f'# GAME #{i + 1} #')
                 team_1, team_1_odds, team_1_kelly, team_2, team_2_odds, team_2_kelly, \
                     proj_percent_1, proj_percent_2, team_1_prob, team_2_prob = odds_calculator.odds_calc()
                 team_1_bet = round(((team_1_kelly / 100) * bet_pool), 2)
@@ -94,7 +94,7 @@ while True:
                         # open the user inputted output file in append mode
                         # use the name write_odds to work with the file
                         with open(write_file, mode='a', encoding='utf-8') as write_odds:
-                            write_odds.write(f'\n#### GAME #{i} ####')
+                            write_odds.write(f'\n#### GAME #{i + 1} ####')
                             write_odds.write(f'\n{team_1} has a {round(team_1_odds, 2)}% implied winning probability.')
                             write_odds.write(f'\n{team_1} has a projected winning probability of {proj_percent_1}%')
                             write_odds.write(f'\n{team_1}\'s Kelly % is: {round(team_1_kelly, 2)}%')
