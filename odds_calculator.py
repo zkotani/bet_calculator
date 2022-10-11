@@ -89,4 +89,4 @@ def odds_calc():
     print(f'{team_1}\'s Kelly % is: {team_1_kelly}')
     print(f'\n{team_2} has a {team_2_odds * 100}% implied winning probability.')
     print(f'{team_2}\'s Kelly % is: {team_2_kelly}')
-    return team_1, (team_1_odds * 100), team_2_kelly, team_2, (team_2_odds * 100), team_2_kelly
+    return team_1, (team_1_odds * 100), team_1_kelly, team_2, (team_2_odds * 100), team_2_kelly

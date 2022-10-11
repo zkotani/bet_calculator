@@ -2,7 +2,7 @@
 
 '''
 Name:           main.py
-Version:        0.1
+Version:        0.9
 Description:    Main program file for bet calculator project.
 Developer:      Zyphlen Kotani [zkotani@gmail.com]
 Github:         https://github.com/zkotani
@@ -15,15 +15,15 @@ import re
 def options_menu():
     print('\nProgram options:')
     print('1. Odds Calculator')
-    print('2. Bet Calculator')
-    print('3. Quit')
+    # print('2. Bet Calculator')
+    print('2. Quit')
 
 bet_calculator.greeting()
 while True:
     options_menu()
     try:
         user_option = int(input('\nWhich option would you like to choose?\n> '))
-        if user_option not in range(1, 4):
+        if user_option not in range(1, 3):
             raise ValueError
     except ValueError:
         print('\nError! Option must be a valid number from 1-3, try again.')
@@ -60,15 +60,12 @@ while True:
                 except IOError:
                     # if the file does not exist, write an empty file
                     chk_empty.write('')
-            while True:
-                number_of_games = input('\nHow many games are being played today?\n> ')
-                if re.fullmatch('([1-9]\d*)', number_of_games):
-                    break
-                else:
-                    print('\nError! Make sure you\'re entering a valid number.')
-                    continue
+            bet_pool = bet_calculator.collect_pool()
+            number_of_games = bet_calculator.number_of_bets()
             for i in range(int(number_of_games)):
                 team_1, team_1_odds, team_1_kelly, team_2, team_2_odds, team_2_kelly = odds_calculator.odds_calc()
+                team_1_bet = round((team_1_kelly * bet_pool), 2)
+                team_2_bet = round((team_2_kelly * bet_pool), 2)
                 try:
                     # open user inputted output file in read mode
                     with open(write_file, mode='r', encoding='utf-8') as read_file:
@@ -88,8 +85,8 @@ while True:
                         # use the name write_odds to work with the file
                         with open(write_file, mode='a', encoding='utf-8') as write_odds:
 			                # append 'team name,odds,kelly' onto new lines
-                            write_odds.write(f'Team: {team_1}, Odds: {team_1_odds}, Kelly: {team_1_kelly}\n')
-                            write_odds.write(f'Team: {team_2}, Odds: {team_2_odds}, Kelly: {team_2_kelly}\n')
+                            write_odds.write(f'Team: {team_1}, Odds: {team_1_odds}%, Kelly: {team_1_kelly}%, Bet: ${team_1_bet}\n')
+                            write_odds.write(f'Team: {team_2}, Odds: {team_2_odds}%, Kelly: {team_2_kelly}%, Bet: ${team_2_bet}\n')
                     # if the last character is not a newline
                     else:
                     # open the user inputted output file in append mode
@@ -104,8 +101,8 @@ while True:
                     # if there is an IOError, output the message and exit the function
                     print('\nUh-oh! There has been an error. Let\'s try again.')
             continue
+        # case 2:
+        #     bet_calculator.bet_calc()
+        #     continue
         case 2:
-            bet_calculator.bet_calc()
-            continue
-        case 3:
             bet_calculator.exit_program('\nAre you sure you would like to exit? [y/n]\n > ')
