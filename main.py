@@ -94,14 +94,14 @@ while True:
                         # open the user inputted output file in append mode
                         # use the name write_odds to work with the file
                         with open(write_file, mode='a', encoding='utf-8') as write_odds:
-                            write_odds.write(f'\n{team_1} has a {team_1_odds}% implied winning probability.')
+                            write_odds.write(f'{team_1} has a {team_1_odds}% implied winning probability.')
                             write_odds.write(f'\n{team_1} has a projected winning probability of {proj_percent_1}%')
                             write_odds.write(f'\n{team_1}\'s Kelly % is: {team_1_kelly}%')
                             write_odds.write(f'\nA suggested bet on {team_1} would be: ${team_1_bet} for a return of: ${round(team_1_bet * team_1_prob, 2)}')
                             write_odds.write(f'\n\n{team_2} has a {team_2_odds}% implied winning probability.')
                             write_odds.write(f'\n{team_2} has a projected winning probability of {proj_percent_2}%')
                             write_odds.write(f'\n{team_2}\'s Kelly % is: {team_2_kelly}%')
-                            write_odds.write(f'\nA suggested bet on {team_2} would be: ${team_2_bet} for a return of: ${round(team_2_bet * team_2_prob, 2)}')
+                            write_odds.write(f'\nA suggested bet on {team_2} would be: ${team_2_bet} for a return of: ${round(team_2_bet * team_2_prob, 2)}\n')
                     # if the last character is not a newline
                     else:
                     # open the user inputted output file in append mode
@@ -114,7 +114,7 @@ while True:
                             write_odds.write(f'\n\n{team_2} has a {team_2_odds}% implied winning probability.')
                             write_odds.write(f'\n{team_2} has a projected winning probability of {proj_percent_2}%')
                             write_odds.write(f'\n{team_2}\'s Kelly % is: {team_2_kelly}%')
-                            write_odds.write(f'\nA suggested bet on {team_2} would be: ${team_2_bet} for a return of: ${round(team_2_bet * team_2_prob, 2)}')
+                            write_odds.write(f'\nA suggested bet on {team_2} would be: ${team_2_bet} for a return of: ${round(team_2_bet * team_2_prob, 2)}\n')
                     # inform the user where the username and password have been saved
                     print(f'\nThe file has been saved been saved in \'{write_file}\'')
                 except IOError:
