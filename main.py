@@ -30,7 +30,7 @@ while True:
         continue
     match user_option:
         case 1:
-            write_file = input('\nEnter the name of the file you want to write output to.\n')
+            write_file = input('\nEnter the name of the file you want to write output to.\n> ')
             for i in write_file:
                 # if the character is '\'
                 if i == '\\':
