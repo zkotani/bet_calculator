@@ -94,6 +94,7 @@ while True:
                         # open the user inputted output file in append mode
                         # use the name write_odds to work with the file
                         with open(write_file, mode='a', encoding='utf-8') as write_odds:
+                            write_odds.write(f'\n#### GAME #{i} ####')
                             write_odds.write(f'\n{team_1} has a {round(team_1_odds, 2)}% implied winning probability.')
                             write_odds.write(f'\n{team_1} has a projected winning probability of {proj_percent_1}%')
                             write_odds.write(f'\n{team_1}\'s Kelly % is: {round(team_1_kelly, 2)}%')
@@ -107,6 +108,7 @@ while True:
                     # open the user inputted output file in append mode
                     # use the name write_odds to work with the file
                         with open(write_file, mode='a', encoding='utf-8') as write_odds:
+                            write_odds.write(f'\n#### GAME #{i} ####')
                             write_odds.write(f'\n{team_1} has a {round(team_1_odds, 2)}% implied winning probability.')
                             write_odds.write(f'\n{team_1} has a projected winning probability of {proj_percent_1}%')
                             write_odds.write(f'\n{team_1}\'s Kelly % is: {round(team_1_kelly, 2)}%')
