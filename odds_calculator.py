@@ -27,8 +27,8 @@ def implied_probability(odds_1: str, odds_2: str, float_percent_1: float, float_
         case '+':
             team_2_prob = (int(odds_2[1:]) / 100) + 1
             impl_prob_2 = (100 / (int_odds_2 + 100))
-    team_1_kelly = ((team_1_prob * (float_percent_1 / 100)) - (0.35 - (float_percent_1 / 100)) / team_2_prob) #* 0.35
-    team_2_kelly = ((team_1_prob * (float_percent_2 / 100)) - (0.35 - (float_percent_2 / 100)) / team_2_prob) #* 0.35
+    team_1_kelly = (((team_1_prob - 1) * (float_percent_1 / 100) - (1 - (float_percent_1 / 100))) / (team_1_prob - 1)) * 35
+    team_2_kelly = (((team_2_prob - 1) * (float_percent_2 / 100) - (1 - (float_percent_2 / 100))) / (team_2_prob - 1)) * 35
     return round(impl_prob_1, 2), round(impl_prob_2, 2), round(team_1_kelly, 2), round(team_2_kelly, 2), team_1_prob, team_2_prob
 
 

@@ -11,6 +11,7 @@ Github:         http://github.com/zkotani
 
 # Imports
 
+from email import message
 import re # Regular expression support
 import sys # Exit function
 from time import sleep # Sleep function
@@ -35,9 +36,9 @@ def exit_program(exit_prompt: str):
         print('\nBye~\n')
         sys.exit()
 
-def greeting():
+def greeting(message_str):
     # Prints greeting strings
-    greeting_string = '# Welcome to Bet Calculator v1.1! #' # Welcome string
+    greeting_string = message_str # Welcome string
     greeting_hash = ''
     for char in greeting_string:
         # Creates a string the same number of characters as
@@ -86,7 +87,7 @@ def number_of_bets():
     # Ask the user how many bets will be placed.
     while True:
         try:
-            num_bets = int(input('\nHow many games are being be played?\n> '))
+            num_bets = int(input('\nHow many games are being played?\n> '))
         except ValueError:
             # If there is a value error, let the user know
             print('\nError! Please enter a valid number!')
