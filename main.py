@@ -18,7 +18,7 @@ def options_menu():
     # print('2. Bet Calculator')
     print('2. Quit')
 
-bet_calculator.greeting()
+bet_calculator.greeting('# Welcome to Bet Calculator v1.1! #')
 while True:
     options_menu()
     try:
@@ -63,9 +63,19 @@ while True:
             bet_pool = bet_calculator.collect_pool()
             number_of_games = bet_calculator.number_of_bets()
             for i in range(int(number_of_games)):
-                team_1, team_1_odds, team_1_kelly, team_2, team_2_odds, team_2_kelly = odds_calculator.odds_calc()
-                team_1_bet = round((team_1_kelly * bet_pool), 2)
-                team_2_bet = round((team_2_kelly * bet_pool), 2)
+                bet_calculator.greeting(f'# GAME #{i + 1 } #')
+                team_1, team_1_odds, team_1_kelly, team_2, team_2_odds, team_2_kelly, \
+                    proj_percent_1, proj_percent_2, team_1_prob, team_2_prob = odds_calculator.odds_calc()
+                team_1_bet = round(((team_1_kelly / 100) * bet_pool), 2)
+                team_2_bet = round(((team_2_kelly / 100) * bet_pool), 2)
+                print(f'\n{team_1} has a {team_1_odds}% implied winning probability.')
+                print(f'{team_1} has a projected winning probability of {proj_percent_1}%')
+                print(f'{team_1}\'s Kelly % is: {team_1_kelly}%')
+                print(f'A suggested bet on {team_1} would be: ${team_1_bet} for a return of: ${round(team_1_bet * team_1_prob, 2)}')
+                print(f'\n{team_2} has a {team_2_odds}% implied winning probability.')
+                print(f'{team_2} has a projected winning probability of {proj_percent_2}%')
+                print(f'{team_2}\'s Kelly % is: {team_2_kelly}%')
+                print(f'A suggested bet on {team_2} would be: ${team_2_bet} for a return of: ${round(team_2_bet * team_2_prob, 2)}')
                 try:
                     # open user inputted output file in read mode
                     with open(write_file, mode='r', encoding='utf-8') as read_file:
@@ -93,8 +103,8 @@ while True:
                     # use the name write_odds to work with the file
                         with open(write_file, mode='a', encoding='utf-8') as write_odds:
                             # append 'team name,odds,kelly' onto new lines
-                            write_odds.write(f'Team: {team_1}, Odds: {team_1_odds}, Kelly: {team_1_kelly}\n')
-                            write_odds.write(f'Team: {team_2}, Odds: {team_2_odds}, Kelly: {team_2_kelly}\n')
+                            write_odds.write(f'Team: {team_1}, Odds: {team_1_odds}%, Kelly: {team_1_kelly}%, Bet: ${team_1_bet}\n')
+                            write_odds.write(f'Team: {team_2}, Odds: {team_2_odds}%, Kelly: {team_2_kelly}%, Bet: ${team_2_bet}\n')
                     # inform the user where the username and password have been saved
                     print(f'\nThe file has been saved been saved in \'{write_file}\'')
                 except IOError:
