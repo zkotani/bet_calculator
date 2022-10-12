@@ -15,11 +15,6 @@ import sys # Exit function
 from time import sleep # Sleep function
 from typing import Union # Allow multiple types in function paramater
 
-# Global variables
-
-# Empty dictionary to be populated procedurally
-bets_dict = {}
-
 # Functions -- Printing to console
 
 def options_menu():
@@ -92,7 +87,8 @@ def create_file():
     write_file = '.'.join(split_file_1)
     # open user inputted output file in write+ mode
     # use name as 'chk_empty' to work with file
-    with open(write_file, mode='w+', encoding='utf-8') as chk_empty:
+    with open(write_file, mode='a+', encoding='utf-8') as chk_empty:
+        # chk_empty.readlines()
         try:
             # try to read the lines in the file
             chk_empty.readlines()
@@ -101,9 +97,16 @@ def create_file():
             chk_empty.write('')
     return write_file
 
-def save_file(write_file: str, i: int,
-    team_1: str, team_1_odds, team_1_kelly, team_1_bet, team_1_prob, proj_percent_1,
-        team_2: str, team_2_odds, team_2_kelly, team_2_bet, team_2_prob, proj_percent_2):
+def save_file(
+    write_file: str,
+    i: int,
+    team_name: str,
+    american_odds: int,
+    decimal_odds: float,
+    win_percent: float,
+    implied_probability: float,
+    kelly: float
+):
     ''' save the output from the program to the file created earlier '''
     try:
         # open user inputted output file in read mode
@@ -176,7 +179,27 @@ def calculate_implied_probability(
                 return (abs(team_odds) / (abs(team_odds) + 100)) * 100
             return (100 / (abs(team_odds) + 100)) * 100
         case 'DECIMAL':
-            return (1 / team_odds) * 100
+            return round((1 / team_odds) * 100, 2)
+
+def convert_american(
+    team_odds: int
+):
+    ''' convert american odds to decimal '''
+    match team_odds:
+        case team_odds if team_odds <= 0:
+            return 1 - (100 / team_odds)
+        case team_odds if team_odds > 0:
+            return (team_odds / 100) + 1
+
+def convert_decimal(
+    team_odds: float
+):
+    ''' convert decimal odds to american '''
+    match team_odds:
+        case team_odds if team_odds >= 2:
+            return (team_odds - 1) * 100
+        case team_odds if team_odds < 2:
+            return (-100)/(team_odds - 1)
 
 def calculate_kelly(
     odds_type: str,
@@ -186,16 +209,12 @@ def calculate_kelly(
 ):
     ''' calculate the kelly probability of the bet '''
     if odds_type == 'AMERICAN':
-        match team_odds:
-            case team_odds if team_odds <= 0:
-                team_odds = 1 - (100 / team_odds)
-            case team_odds if team_odds > 0:
-                team_odds = (team_odds / 100) + 1
-    decimal_odds = (team_odds - 1)
+        team_odds = convert_american(team_odds)
+    decimal_odds = team_odds - 1
     win_probability = round(win_percent / 100, 2)
-    lose_probability = round(1 - b, 2)
-    kelly = (decimal_odds * win_probability - lose_probability) / win_probability
-    return kelly * (kelly_multi * 100)
+    lose_probability = round(1 - win_probability, 2)
+    kelly = ((decimal_odds * win_probability) - lose_probability) / decimal_odds
+    return round(kelly * (kelly_multi * 100), 2)
 
 # Functions -- Collecting data
 
@@ -213,10 +232,8 @@ def collect_pool():
         if re.fullmatch(r'(\d{1,}(,\d{3})*(\.\d{1,2})?)', bet_pool):
             # If the entered value contains commas, remove them
             split_pool = bet_pool.split(',')
-            bet_float = ''
             # Add the split strings back together
-            for i in split_pool:
-                bet_float.join(i)
+            bet_float = ''.join(split_pool)
             try:
                 # Try to convert the entered value to a float
                 bet_float = float(bet_float)
@@ -272,7 +289,7 @@ def get_team_name(
                 team_num = 'first'
             case 1:
                 team_num = 'second'
-        team_name = input(f'\nEnter the name of the {team_num} team.\n> ')
+        team_name = input(f'\nEnter the name of the {team_num} team.\n> ').upper()
         if check_name(bets_dict, team_name):
             continue
         while True:
@@ -305,8 +322,8 @@ def get_team_odds(
     ''' collect team odds in american or decimal format '''
     while True:
         odds_type = input\
-            ('\nAre you using American or Decimal odds?\n> ').capitalize()
-        if re.fullmatch(r'(AMERICAN)|(DECIMAL)', odds_type):
+            ('\nAre you using American or Decimal odds?\n> ').upper()
+        if re.fullmatch(r'AMERICAN|DECIMAL', odds_type):
             match odds_type:
                 case 'AMERICAN':
                     team_odds = input(f'\nEnter {team_name}\'s odds [American]\n> ')
@@ -369,9 +386,11 @@ def projected_win_percent(
 
 def bet_info(
     total_bets: int,
+    bet_float: float,
     games_or_bets: str
 ):
     ''' collect info on bets to be placed '''
+    bets_dict = {}
     for i in range(total_bets):
         match games_or_bets:
             case 'games':
@@ -382,19 +401,26 @@ def bet_info(
                     win_percent = projected_win_percent(team_name)
                     implied_probability = calculate_implied_probability(odds_type, team_odds)
                     kelly = calculate_kelly(odds_type, team_odds, win_percent)
-                    bets_dict[team_name] = [
-                        team_odds,
-                        odds_type,
-                        win_percent,
-                        implied_probability,
-                        kelly
-                    ]
-                return bets_dict
+                    bet_amount = round((kelly / bet_float) * 100, 2)
+                    match odds_type:
+                        case 'AMERICAN':
+                            american_odds = team_odds
+                            decimal_odds = convert_american(team_odds)
+                        case 'DECIMAL':
+                            american_odds = convert_decimal(team_odds)
+                            decimal_odds = team_odds
+                    if kelly > 0:
+                        bets_dict[team_name] = [
+                            american_odds,
+                            decimal_odds,
+                            win_percent,
+                            implied_probability,
+                            kelly,
+                            bet_amount
+                        ]
             case 'bets':
                 pass
-
-
-
+    return bets_dict
 
 # # Loop for the total number of bets to be placed
 # while True:

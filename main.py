@@ -30,11 +30,17 @@ while True:
             new_file = functions.create_file()
             print(f'Your file will be saved as: \'{new_file}\'')
             bet_float = functions.collect_pool()
-            num_bets = functions.number_of_bets(games_or_bets='games')
-            test = functions.bet_info(total_bets=num_bets, games_or_bets='games')
-            print(test)
-            # team_1_bet = round(((team_1_kelly / 100) * bet_pool), 2)
-            # team_2_bet = round(((team_2_kelly / 100) * bet_pool), 2)
+            num_bets = functions.number_of_bets('games')
+            bets_dict = functions.bet_info(num_bets, bet_float, 'games')
+            for key, val in bets_dict.items():
+                team_name = key
+                american_odds = val[0]
+                decimal_odds = val[1]
+                win_percent = val[2]
+                implied_probability = val[3]
+                kelly = val[4]
+                bet_amount = val[5]
+
             # print(f'\n{team_1} has a {round(team_1_odds, 2)}% implied winning probability.')
             # print(f'{team_1} has a projected winning probability of {proj_percent_1}%')
             # print(f'{team_1}\'s Kelly % is: {round(team_1_kelly, 2)}%')
