@@ -48,13 +48,13 @@ def exit_program(
     while True:
         # Does the user wish to exit the program?
         exit_str = input(f'{exit_prompt}')
-        if re.fullmatch(('y|Y|n|N'), exit):
+        if re.fullmatch(r'y|Y|n|N', exit_str):
             break
         # Make sure user is entering `y` or `n`
         print('\nError! Please answer using \'y\' or \'n\'.')
         continue
         # Exit if the user has selected yes
-    if re.fullmatch('y|Y', exit_str):
+    if re.fullmatch(r'y|Y', exit_str):
         print('\nThanks for using Bet Calculator!')
         sleep(5)
         print('\nBye~\n')
