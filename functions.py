@@ -2,7 +2,7 @@
 
 '''
 Name:           functions.py
-Version:        1.0
+Version:        1.2
 Description:    Functions go here.
 Developer:      Zyphlen Kotani [zkotani@gmail.com]
 Github:         https://github.com/zkotani
@@ -276,30 +276,29 @@ def number_of_bets(
         break
     return num_bets
 
-def get_team_name(
+def get_name(
     j: int,
-    bets_dict: dict
+    bets_dict: dict,
+    games_or_bets: str
 ):
     ''' ask user for the name of the teams being bet on '''
     while True:
-        match j:
-            case 0:
-                team_num = 'first'
-            case 1:
-                team_num = 'second'
-        team_name = input(f'\nEnter the name of the {team_num} team.\n> ').upper()
-        if check_name(bets_dict, team_name):
-            continue
-        while True:
-            team_name_ok = input(f'\nTeam #{j + 1}: {team_name}? [y/n]\n> ')
-            if re.fullmatch('(y|Y|n|N)', team_name_ok):
-                break
-            print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
-            continue
-        if re.fullmatch('(n|N)', team_name_ok):
-            continue
-        break
-    return team_name
+        match games_or_bets:
+            case 'games':
+                match j:
+                    case 0:
+                        team_num = 'first'
+                    case 1:
+                        team_num = 'second'
+                team_name = input(f'\nEnter the name of the {team_num} team.\n> ').upper()
+                if check_name(bets_dict, team_name):
+                    continue
+                return team_name
+            case 'bets':
+                bet_name = input(f'\nEnter the name of bet #{j + 1}.\n> ').upper()
+                if check_name(bets_dict, bet_name):
+                    continue
+                return bet_name
 
 def check_name(
     bets_dict: dict,
@@ -314,7 +313,7 @@ def check_name(
     # Move to next section if the name is fine
     return False
 
-def get_team_odds(
+def get_odds(
     team_name: str
 ):
     ''' collect team odds in american or decimal format '''
@@ -394,8 +393,8 @@ def bet_info(
             case 'games':
                 greeting(f'# GAME #{i + 1} #')
                 for j in range(2):
-                    team_name = get_team_name(j, bets_dict)
-                    team_odds, odds_type = get_team_odds(team_name)
+                    team_name = get_name(j, bets_dict, 'games')
+                    team_odds, odds_type = get_odds(team_name)
                     win_percent = projected_win_percent(team_name)
                     implied_probability = calculate_implied_probability(odds_type, team_odds)
                     kelly = calculate_kelly(odds_type, team_odds, win_percent)
@@ -417,76 +416,27 @@ def bet_info(
                             bet_amount
                         ]
             case 'bets':
-                pass
+                greeting(f'# BET #{i + 1} #')
+                bet_name = get_name(i, bets_dict, 'bets')
+                bet_odds, odds_type = get_odds(bet_name)
+                win_percent = projected_win_percent(bet_name)
+                implied_probability = calculate_implied_probability(odds_type, bet_odds)
+                kelly = calculate_kelly(odds_type, bet_odds, win_percent)
+                bet_amount = round((kelly / bet_float) * 100, 2)
+                match odds_type:
+                    case 'AMERICAN':
+                        american_odds = team_odds
+                        decimal_odds = convert_american(team_odds)
+                    case 'DECIMAL':
+                        american_odds = convert_decimal(team_odds)
+                        decimal_odds = team_odds
+                if kelly > 0:
+                    bets_dict[bet_name] = [
+                        american_odds,
+                        decimal_odds,
+                        win_percent,
+                        implied_probability,
+                        kelly,
+                        bet_amount
+                    ]
     return bets_dict
-
-# # Loop for the total number of bets to be placed
-# while True:
-#     # Ask user for the team name/title for the bet at current index
-#     bet_title = input(f'\nEnter the name of the team or title of bet #{i + 1}.\n> ')
-#     # Check to see if the name has already been used
-#     if bet_title in all_bets:
-#         # Dictionary keys need to be distinct, tell the user to try a different name
-#         print('\nError! You\'re already using this name. Try something different.')
-#         continue
-#     while True:
-#         # Confirm the name of the bet
-#         title_ok = input(f'\nBet title: {bet_title}? [y/n]\n> ')
-#         if re.fullmatch('(y|Y|n|N)', title_ok):
-#             break
-#         # Make sure the user is entering `y` or `n`
-#         print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
-#         continue
-#     # If the user doesn't like the name, have them start this section over
-#     if re.fullmatch('(n|N)', title_ok):
-#         continue
-#     # Move to next section if the name is fine
-#     break
-# while True:
-#     # Ask user what % of their pool is going toward the bet they've just named
-#     bet_percent = input(f'\nWhat percentage of your pool is going towards Bet #{i + 1}: {bet_title}?\n> %')
-#     # Make sure the input is in the format:
-#         # 100
-#         # 100.00
-#         # 100.0
-#         # .1
-#         # .01
-#         # etc.
-#     if re.fullmatch('(\d*(\.\d{1,})?)', bet_percent):
-#         # Make sure the number entered can be used as a float
-#         try:
-#             float_percent = float(bet_percent)
-#         # If a ValueError is raised, let the user know
-#         except ValueError:
-#             print('\nError! Make sure you\'re entering a valid number!')
-#             continue
-#     # If the input doesn't match the pattern, tell the user what to enter
-#     else:
-#         print('\nError! Make sure you\'re entering a number between 0-100.')
-#         continue
-#     # Make sure input is more than 0
-#     if float_percent <= 0:
-#         exit_program('\nError! Can\'t bet 0% or less. Exit? [y/n]\n> ')
-#         continue
-#     # Make sure input is not over 100
-#     elif float_percent > 100:
-#         exit_program('\nError! Can\'t bet over 100% Exit? [y/n]\n> ')
-#         continue
-#     # Confirm the user`s input
-#     confirm_bet = input(f'\nYou would like to bet {float_percent}% of your pool on {bet_title}? [y/n]\n> ')
-#     if re.fullmatch('(y|Y|n|N)', confirm_bet):
-#         # If the user isn`t happy with their choice, restart this section
-#         if re.fullmatch('(n|N)', confirm_bet):
-#             continue
-#         # Move to next section if they`re happy with their input
-#         else:
-#             break
-#     # Make sure the user enters `y` or `n`
-#     else:
-#         print('\nError! Make sure you\'re entering \'y\' or \'n\'.')
-#         continue
-# # Add an entry to the all_bets dictionary
-#     # Key: name of team/bet
-#     # Value: bet percent
-# all_bets[bet_title] = (float_percent / 100)
-# return all_bets

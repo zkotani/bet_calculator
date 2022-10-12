@@ -2,18 +2,13 @@
 
 '''
 Name:           main.py
-Version:        0.9
+Version:        1.2
 Description:    Main program file for bet calculator project.
 Developer:      Zyphlen Kotani [zkotani@gmail.com]
 Github:         https://github.com/zkotani
 '''
 
-import re
 import functions
-
-import odds_calculator
-import bet_calculator
-
 
 functions.greeting('# Welcome to Bet Calculator v1.0! #')
 while True:
@@ -27,8 +22,8 @@ while True:
         continue
     match user_option:
         case 1:
-            new_file = functions.create_file()
-            print(f'\nYour file will be saved as: \'{new_file}\'')
+            NEW_FILE = functions.create_file()
+            print(f'\nYour file will be saved as: \'{NEW_FILE}\'')
             bet_float = functions.collect_pool()
             num_bets = functions.number_of_bets('games')
             bets_dict = functions.bet_info(num_bets, bet_float, 'games')
@@ -36,13 +31,25 @@ while True:
                 team_name = key
                 team_info = val
                 functions.save_to_file(
-                    new_file,
+                    NEW_FILE,
                     team_name,
                     team_info
                 )
-            print(f'\nYour bets have been saved to: \'{new_file}\'')
+            print(f'\nYour bets have been saved to: \'{NEW_FILE}\'')
         case 2:
-            print('\nnot working yet')
-            continue
+            NEW_FILE = functions.create_file()
+            print(f'\nYour file will be saved as: \'{NEW_FILE}\'')
+            bet_float = functions.collect_pool()
+            num_bets = functions.number_of_bets('games')
+            bets_dict = functions.bet_info(num_bets, bet_float, 'bets')
+            for key, val in bets_dict.items():
+                team_name = key
+                team_info = val
+                functions.save_to_file(
+                    NEW_FILE,
+                    team_name,
+                    team_info
+                )
+            print(f'\nYour bets have been saved to: \'{NEW_FILE}\'')
         case 3:
             functions.exit_program('\nAre you sure you would like to exit? [y/n]\n > ')
