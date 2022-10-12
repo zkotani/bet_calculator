@@ -331,7 +331,7 @@ def get_odds(
     while True:
         match odds_type:
             case 'AMERICAN':
-                team_odds = input(f'\nEnter {team_name}\'s odds [American]\n> ')
+                team_odds = input(f'Enter {team_name}\'s odds [American]\n> ')
                 if re.fullmatch(r'(-|\+)\d{3}', team_odds):
                     try:
                         team_odds = int(team_odds)
@@ -342,7 +342,7 @@ def get_odds(
                 print('\nError! Odds must be in American format.')
                 continue
             case 'DECIMAL':
-                team_odds = input(f'\nEnter {team_name}\'s odds [Decimal].\n> ')
+                team_odds = input(f'Enter {team_name}\'s odds [Decimal].\n> ')
                 if re.fullmatch(r'(\d{0,3}\.\d{1,}?)(\d*(\.\d{1,})?)', team_odds):
                     try:
                         team_odds = float(team_odds)
