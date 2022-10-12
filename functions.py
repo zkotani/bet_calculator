@@ -184,9 +184,9 @@ def convert_american(
     ''' convert american odds to decimal '''
     match team_odds:
         case team_odds if team_odds <= 0:
-            return 1 - (100 / team_odds)
+            return round(1 - (100 / team_odds), 2)
         case team_odds if team_odds > 0:
-            return (team_odds / 100) + 1
+            return round((team_odds / 100) + 1, 2)
 
 def convert_decimal(
     team_odds: float
