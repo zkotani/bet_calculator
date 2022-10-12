@@ -28,29 +28,21 @@ while True:
     match user_option:
         case 1:
             new_file = functions.create_file()
-            print(f'Your file will be saved as: \'{new_file}\'')
+            print(f'\nYour file will be saved as: \'{new_file}\'')
             bet_float = functions.collect_pool()
             num_bets = functions.number_of_bets('games')
             bets_dict = functions.bet_info(num_bets, bet_float, 'games')
             for key, val in bets_dict.items():
                 team_name = key
-                american_odds = val[0]
-                decimal_odds = val[1]
-                win_percent = val[2]
-                implied_probability = val[3]
-                kelly = val[4]
-                bet_amount = val[5]
-
-            # print(f'\n{team_1} has a {round(team_1_odds, 2)}% implied winning probability.')
-            # print(f'{team_1} has a projected winning probability of {proj_percent_1}%')
-            # print(f'{team_1}\'s Kelly % is: {round(team_1_kelly, 2)}%')
-            # print(f'A suggested bet on {team_1} would be: ${team_1_bet} for a return of: ${round(team_1_bet * team_1_prob, 2)}')
-            # print(f'\n{team_2} has a {round(team_2_odds, 2)}% implied winning probability.')
-            # print(f'{team_2} has a projected winning probability of {proj_percent_2}%')
-            # print(f'{team_2}\'s Kelly % is: {round(team_2_kelly, 2)}%')
-            # print(f'A suggested bet on {team_2} would be: ${team_2_bet} for a return of: ${round(team_2_bet * team_2_prob, 2)}')
+                team_info = val
+                functions.save_to_file(
+                    new_file,
+                    team_name,
+                    team_info
+                )
+            print(f'\nYour bets have been saved to: \'{new_file}\'')
         case 2:
-            print('not working yet')
+            print('\nnot working yet')
             continue
         case 3:
             functions.exit_program('\nAre you sure you would like to exit? [y/n]\n > ')

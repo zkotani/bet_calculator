@@ -10,6 +10,7 @@ Github:         https://github.com/zkotani
 
 # Imports
 
+from array import array
 import re # Regular expression support
 import sys # Exit function
 from time import sleep # Sleep function
@@ -97,15 +98,36 @@ def create_file():
             chk_empty.write('')
     return write_file
 
-def save_file(
+def write_to_file(
     write_file: str,
-    i: int,
     team_name: str,
-    american_odds: int,
-    decimal_odds: float,
-    win_percent: float,
-    implied_probability: float,
-    kelly: float
+    team_info: array,
+    new_line: bool
+):
+    ''' output which is written to saved file '''
+    # open the user inputted output file in append mode
+    # use the name write_odds to work with the file
+    with open(write_file, mode='a', encoding='utf-8') as write_info:
+        match new_line:
+            case True:
+                write_info.write('----------\n')
+            case False:
+                write_info.write('\n----------\n')
+        write_info.write(f'Team: {team_name}\n')
+        if team_info[0] > 0:
+            write_info.write(f'American odds: +{team_info[0]}\n')
+        else:
+            write_info.write(f'American odds: {team_info[0]}\n')
+        write_info.write(f'Decimal odds: {team_info[1]}\n')
+        write_info.write(f'Projected win probability: {team_info[2]}%\n')
+        write_info.write(f'Implied win probability: {team_info[3]}%\n')
+        write_info.write(f'Kelly: {team_info[4]}%\n')
+        write_info.write(f'Bet amount: ${team_info[5]}')
+
+def save_to_file(
+    write_file: str,
+    team_name: str,
+    team_info: array
 ):
     ''' save the output from the program to the file created earlier '''
     try:
@@ -121,50 +143,25 @@ def save_file(
             except IndexError:
                 # if the file is empty make last_char a newline
                 last_char = '\n'
-            # if the last character is a newline or file is empty
+        # if the last character is a newline or file is empty
         if '\n' in last_char:
-            # open the user inputted output file in append mode
-            # use the name write_odds to work with the file
-            with open(write_file, mode='a', encoding='utf-8') as write_odds:
-                write_odds.write\
-                    (f'#### GAME #{i} ####\n')
-                write_odds.write\
-                    (f'\n{team_1} has a {round(team_1_odds, 2)}% implied winning probability.')
-                write_odds.write\
-                    (f'\n{team_1} has a projected winning probability of {proj_percent_1}%')
-                write_odds.write\
-                    (f'\n{team_1}\'s Kelly % is: {round(team_1_kelly, 2)}%')
-                write_odds.write\
-                    (f'\nA suggested bet on {team_1} would be: ${team_1_bet}\
-                        for a return of: ${round(team_1_bet * team_1_prob, 2)}')
-                write_odds.write\
-                    (f'\n\n{team_2} has a {round(team_2_odds, 2)}% implied winning probability.')
-                write_odds.write\
-                    (f'\n{team_2} has a projected winning probability of {proj_percent_2}%')
-                write_odds.write\
-                    (f'\n{team_2}\'s Kelly % is: {round(team_2_kelly, 2)}%')
-                write_odds.write\
-                    (f'\nA suggested bet on {team_2} would be: ${team_2_bet}\
-                        for a return of: ${round(team_2_bet * team_2_prob, 2)}\n')
+            write_to_file(
+                write_file,
+                team_name,
+                team_info,
+                True
+            )
         # if the last character is not a newline
         else:
-        # open the user inputted output file in append mode
-        # use the name write_odds to work with the file
-            with open(write_file, mode='a', encoding='utf-8') as write_odds:
-                write_odds.write(f'\n#### GAME #{i} ####\n')
-                write_odds.write(f'\n{team_1} has a {round(team_1_odds, 2)}% implied winning probability.')
-                write_odds.write(f'\n{team_1} has a projected winning probability of {proj_percent_1}%')
-                write_odds.write(f'\n{team_1}\'s Kelly % is: {round(team_1_kelly, 2)}%')
-                write_odds.write(f'\nA suggested bet on {team_1} would be: ${team_1_bet} for a return of: ${round(team_1_bet * team_1_prob, 2)}')
-                write_odds.write(f'\n\n{team_2} has a {round(team_2_odds, 2)}% implied winning probability.')
-                write_odds.write(f'\n{team_2} has a projected winning probability of {proj_percent_2}%')
-                write_odds.write(f'\n{team_2}\'s Kelly % is: {round(team_2_kelly, 2)}%')
-                write_odds.write(f'\nA suggested bet on {team_2} would be: ${team_2_bet} for a return of: ${round(team_2_bet * team_2_prob, 2)}\n')
-        # inform the user where the username and password have been saved
-        print(f'\nThe file has been saved been saved in \'{write_file}\'')
+            write_to_file(
+                write_file,
+                team_name,
+                team_info,
+                False
+            )
     except IOError:
         # if there is an IOError, output the message and exit the function
-        print('\nUh-oh! There has been an error. Let\'s try again.')
+        print('\nError! There has been an error reading or writing the file.')
 
 # Functions -- Math
 
@@ -176,8 +173,8 @@ def calculate_implied_probability(
     match odds_type:
         case 'AMERICAN':
             if team_odds < 0:
-                return (abs(team_odds) / (abs(team_odds) + 100)) * 100
-            return (100 / (abs(team_odds) + 100)) * 100
+                return round((abs(team_odds) / (abs(team_odds) + 100)) * 100, 2)
+            return round((100 / (abs(team_odds) + 100)) * 100, 2)
         case 'DECIMAL':
             return round((1 / team_odds) * 100, 2)
 
@@ -197,9 +194,9 @@ def convert_decimal(
     ''' convert decimal odds to american '''
     match team_odds:
         case team_odds if team_odds >= 2:
-            return (team_odds - 1) * 100
+            return round((team_odds - 1) * 100, 2)
         case team_odds if team_odds < 2:
-            return (-100)/(team_odds - 1)
+            return round((-100)/(team_odds - 1), 2)
 
 def calculate_kelly(
     odds_type: str,
@@ -280,7 +277,8 @@ def number_of_bets(
     return num_bets
 
 def get_team_name(
-    j: int
+    j: int,
+    bets_dict: dict
 ):
     ''' ask user for the name of the teams being bet on '''
     while True:
@@ -304,12 +302,12 @@ def get_team_name(
     return team_name
 
 def check_name(
-    check_dict: dict,
+    bets_dict: dict,
     check_title: str
 ):
     ''' checks to see if team name/bet title is already in use '''
     # Check to see if the name has already been used
-    if check_title in check_dict:
+    if check_title in bets_dict:
     # Dictionary keys need to be distinct, tell the user to try a different name
         print('\nError! You\'re already using this name. Try something different.')
         return True
@@ -396,7 +394,7 @@ def bet_info(
             case 'games':
                 greeting(f'# GAME #{i + 1} #')
                 for j in range(2):
-                    team_name = get_team_name(j)
+                    team_name = get_team_name(j, bets_dict)
                     team_odds, odds_type = get_team_odds(team_name)
                     win_percent = projected_win_percent(team_name)
                     implied_probability = calculate_implied_probability(odds_type, team_odds)
