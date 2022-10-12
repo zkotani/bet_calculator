@@ -313,43 +313,46 @@ def check_name(
     # Move to next section if the name is fine
     return False
 
-def get_odds(
-    team_name: str
-):
-    ''' collect team odds in american or decimal format '''
+def get_odds_type():
+    ''' ask user if using american or decimal odds '''
     while True:
         odds_type = input\
             ('\nAre you using American or Decimal odds?\n> ').upper()
         if re.fullmatch(r'AMERICAN|DECIMAL', odds_type):
-            match odds_type:
-                case 'AMERICAN':
-                    team_odds = input(f'\nEnter {team_name}\'s odds [American]\n> ')
-                    if re.fullmatch(r'(-|\+)\d{3}', team_odds):
-                        try:
-                            team_odds = int(team_odds)
-                        except ValueError:
-                            print('\nError! Make sure you\'re\
-                                entering a valid number!')
-                            continue
-                        break
-                    print('\nError! Odds must be in American format.')
-                    continue
-                case 'DECIMAL':
-                    team_odds = input(f'\nEnter {team_name}\'s odds [Decimal].\n> ')
-                    if re.fullmatch\
-                        (r'(\d{0,3}\.\d{1,}?)(\d*(\.\d{1,})?)', team_odds):
-                        try:
-                            team_odds = float(team_odds)
-                        except ValueError:
-                            print('\nError! Make sure you\'re\
-                                entering a valid number!')
-                            continue
-                        break
-                    print('\nError! Odds must be in Decimal format.')
-                    continue
+            return odds_type
         print('\nError! Make sure you\'re entering `American` or `Decimal`.')
         continue
-    return team_odds, odds_type
+
+def get_odds(
+    team_name: str,
+    odds_type: str
+):
+    ''' collect team odds in american or decimal format '''
+    while True:
+        match odds_type:
+            case 'AMERICAN':
+                team_odds = input(f'\nEnter {team_name}\'s odds [American]\n> ')
+                if re.fullmatch(r'(-|\+)\d{3}', team_odds):
+                    try:
+                        team_odds = int(team_odds)
+                    except ValueError:
+                        print('\nError! Make sure you\'re entering a valid number!')
+                        continue
+                    break
+                print('\nError! Odds must be in American format.')
+                continue
+            case 'DECIMAL':
+                team_odds = input(f'\nEnter {team_name}\'s odds [Decimal].\n> ')
+                if re.fullmatch(r'(\d{0,3}\.\d{1,}?)(\d*(\.\d{1,})?)', team_odds):
+                    try:
+                        team_odds = float(team_odds)
+                    except ValueError:
+                        print('\nError! Make sure you\'re entering a valid number!')
+                        continue
+                    break
+                print('\nError! Odds must be in Decimal format.')
+                continue
+    return team_odds
 
 def projected_win_percent(
     team_name: str
@@ -384,7 +387,8 @@ def projected_win_percent(
 def bet_info(
     total_bets: int,
     bet_float: float,
-    games_or_bets: str
+    games_or_bets: str,
+    odds_type: str
 ):
     ''' collect info on bets to be placed '''
     bets_dict = {}
@@ -394,11 +398,11 @@ def bet_info(
                 greeting(f'# GAME #{i + 1} #')
                 for j in range(2):
                     team_name = get_name(j, bets_dict, 'games')
-                    team_odds, odds_type = get_odds(team_name)
+                    team_odds = get_odds(team_name, odds_type)
                     win_percent = projected_win_percent(team_name)
                     implied_probability = calculate_implied_probability(odds_type, team_odds)
                     kelly = calculate_kelly(odds_type, team_odds, win_percent)
-                    bet_amount = round((kelly / bet_float) * 100, 2)
+                    bet_amount = round((kelly / 100) * bet_float, 2)
                     match odds_type:
                         case 'AMERICAN':
                             american_odds = team_odds
@@ -418,11 +422,11 @@ def bet_info(
             case 'bets':
                 greeting(f'# BET #{i + 1} #')
                 bet_name = get_name(i, bets_dict, 'bets')
-                bet_odds, odds_type = get_odds(bet_name)
+                bet_odds = get_odds(bet_name, odds_type)
                 win_percent = projected_win_percent(bet_name)
                 implied_probability = calculate_implied_probability(odds_type, bet_odds)
                 kelly = calculate_kelly(odds_type, bet_odds, win_percent)
-                bet_amount = round((kelly / bet_float) * 100, 2)
+                bet_amount = round((kelly / 100) * bet_float, 2)
                 match odds_type:
                     case 'AMERICAN':
                         american_odds = team_odds
