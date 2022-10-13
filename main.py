@@ -41,8 +41,9 @@ while True:
             NEW_FILE = functions.create_file()
             print(f'\nYour file will be saved as: \'{NEW_FILE}\'')
             bet_float = functions.collect_pool()
-            num_bets = functions.number_of_bets('games')
-            bets_dict = functions.bet_info(num_bets, bet_float, 'bets')
+            odds_type = functions.get_odds_type()
+            num_bets = functions.number_of_bets('indiv')
+            bets_dict = functions.bet_info(num_bets, bet_float, 'bets', odds_type)
             for key, val in bets_dict.items():
                 team_name = key
                 team_info = val
