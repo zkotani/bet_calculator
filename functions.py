@@ -429,11 +429,11 @@ def bet_info(
                 bet_amount = round((kelly / 100) * bet_float, 2)
                 match odds_type:
                     case 'AMERICAN':
-                        american_odds = team_odds
-                        decimal_odds = convert_american(team_odds)
+                        american_odds = bet_odds
+                        decimal_odds = convert_american(bet_odds)
                     case 'DECIMAL':
-                        american_odds = convert_decimal(team_odds)
-                        decimal_odds = team_odds
+                        american_odds = convert_decimal(bet_odds)
+                        decimal_odds = bet_odds
                 if kelly > 0:
                     bets_dict[bet_name] = [
                         american_odds,
