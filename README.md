@@ -1,9 +1,12 @@
 # Bet Calculator
 
 ## Description
-A simple python script used to automate sports betting. Takes inputs and outputs viable bets to a text file.
+This is a simple python script that i wrote to help determine which bets are more likely to pay out. using different sources, i try to determine an assumed winning probability for each game. the script takes individual bets (i.e. props, futures, etc.) or a series of games as input.
+
+The script can take odds in either american or decimal form and asks for the assumed winning probability (currently taken from outside sources) and the odds for that event/team and generates a text file with the games which are perceived to be the best value.
 
 ## Up Next
-- Research and work on developing a model to predict NHL wins.
-- Implement GUI for application
-- Port application to a compiled language to have a binary application?
+- Extra conversion tools
+- Cleaner UI
+- Implement GUI for application?
+- Research and work on developing a model to predict NHL wins
