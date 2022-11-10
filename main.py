@@ -54,4 +54,4 @@ while True:
                 )
             print(f'\nYour bets have been saved to: \'{NEW_FILE}\'')
         case 3:
-            functions.exit_program('\nAre you sure you would like to exit? [y/n]\n > ')
+            functions.exit_program('\nAre you sure you would like to exit? [y/n]\n> ')
