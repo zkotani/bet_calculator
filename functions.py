@@ -13,7 +13,6 @@ Github:         https://github.com/zkotani
 from array import array
 import re # Regular expression support
 import sys # Exit function
-from time import sleep # Sleep function
 from typing import Union # Allow multiple types in function paramater
 
 # Functions -- Printing to console
@@ -56,7 +55,6 @@ def exit_program(
         # Exit if the user has selected yes
     if re.fullmatch(r'y|Y', exit_str):
         print('\nThanks for using Bet Calculator!')
-        sleep(5)
         print('\nBye~\n')
         sys.exit()
 
