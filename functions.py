@@ -330,7 +330,7 @@ def get_odds(
         match odds_type:
             case 'AMERICAN':
                 team_odds = input(f'Enter {team_name}\'s odds [American]\n> ')
-                if re.fullmatch(r'(-|\+)\d{3}', team_odds):
+                if re.fullmatch(r'(-|\+)\d{3,4}', team_odds):
                     try:
                         team_odds = int(team_odds)
                     except ValueError:
